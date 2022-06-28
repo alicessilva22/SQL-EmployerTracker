@@ -2,15 +2,6 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 require('console.table');
 
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'department_db'
-  },
-);
-
 const viewDepartments = () => {
   db.query('SELECT * FROM department', function (err, results) {
     if (err) return console.error(err);
@@ -40,13 +31,13 @@ const addDepartment = () => {
     {
       type: 'input',
       name: 'deptName',
-      message: 'What is the name of the new department?'
+      message: 'What is the name of the new department?',
     }
-  ]).then(answer => {
-    db.query('INSERT INTO department SET ?;',
+  ]).then((answers) => {
+    db.query('INSERT INTO department SET ?',
       {
-        name: answer.deptName
-      });
+        name: answers.deptName
+      })
       init();
   });
 };
@@ -56,23 +47,24 @@ const addRole = () => {
     {
       type: 'input',
       name: 'roleTitle',
-      message: 'What is the title of the new role?'
+      message: 'What is the title of the new role?',
     },
     {
       type: 'input',
       name: 'roleSalary',
-      message: 'What is the salary of the new role?'
+      message: 'What is the salary of the new role?',
     },
     {
       type: 'input',
       name: 'roleDepId',
-      message: 'What is the department of the new role?'
+      message: 'What is the department of the new role?',
     },
-  ]).then(answer => {
-    db.query('INSERT INTO role SET ?', {
-      title: answer.roleTitle,
-      salary: answer.roleSalary,
-      department_id: answer.roleDepId,
+  ]).then((answers) => {
+    db.query('INSERT INTO role SET ?', 
+    {
+      title: answers.roleTitle,
+      salary: answers.roleSalary,
+      department_id: answers.roleDepId,
     })
     init();
   });
@@ -83,42 +75,37 @@ const addEmployee = () => {
     {
       type: 'input',
       name: 'firstName',
-      message: 'What is the employee\'s first name?'
+      message: 'What is the employee\'s first name?',
     },
     {
       type: 'input',
       name: 'lastName',
-      message: 'What is the employee\'s last name?'
+      message: 'What is the employee\'s last name?',
     },
     {
       type: 'input',
       name: 'empRoleId',
-      message: 'What is the employee\'s role id?'
+      message: 'What is the employee\'s role id?',
     },
     {
       type: 'input',
       name: 'empManagerId',
-      message: 'What is the employee\'s manager id?'
+      message: 'What is the employee\'s manager id?',
     },
-  ]).then(answer => {
-    db.query('INSERT INTO employee SET ?;', {
-      first_name: answer.firstName,
-      last_name: answer.lastName,
-      role_id: answer.empRoleId,
-      manager_id: answer.empManagerId,
+  ]).then((answers) => {
+    db.query('INSERT INTO employee SET ?', 
+    {
+      first_name: answers.firstName,
+      last_name: answers.lastName,
+      role_id: answers.empRoleId,
+      manager_id: answers.empManagerId,
     })
-    init();
-  });
-};
+    init()
+  })
+}
 
 const updateRole = () => {
-  db.query('SELECT * FROM employee;', (err, res) => {
-    // console.log(res)
-
-    // let employeeNames = []
-    // for(let i =0; i < res.length; i++) {
-    //   employeeNames.push(res[i].first_name)
-    // }
+  db.query('SELECT * FROM employee', (err, res) => {
     let allEmployeeData = res.map(({ id, first_name }) => ({
       name: first_name,
       value: id
@@ -135,18 +122,18 @@ const updateRole = () => {
       {
         type: 'input',
         name: 'newRole',
-        message: 'What is this employees new role id?'
-      }
-    ]).then(answers => {
+        message: 'What is this employees new role id?',
+      },
+    ]).then((answers) => {
       db.query('UPDATE employee SET ? WHERE ?',
         {
           id: answers.emp,
           role_id: answers.newRole
         })
-        init();
+        init()
     })
-  });
-};
+  })
+}
 
 const init = () => {
   inquirer.prompt([
@@ -163,7 +150,7 @@ const init = () => {
         'Add an employee',
         'Update an employee role',
         'Finish',
-      ]
+      ],
     },
   ]).then((answers) => {
     switch (answers.questions) {
@@ -196,10 +183,20 @@ const init = () => {
         break;
       }
       default: {
+        console.log("exiting");
         process.exit();
       }
     }
   });
 };
 
-init();
+
+const db = mysql.createConnection(
+  {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'tracker_db'
+  },
+  init()
+);
