@@ -15,7 +15,7 @@ const viewDepartments = () => {
   db.query('SELECT * FROM department', function (err, results) {
     if (err) return console.error(err);
     console.table(results);
-    return init();
+    init();
   });
 };
 
@@ -23,7 +23,7 @@ const viewRoles = () => {
   db.query('SELECT * FROM role', function (err, results) {
     if (err) return console.error(err);
     console.table(results);
-    return init();
+    init();
   });
 };
 
@@ -31,7 +31,7 @@ const viewEmployees = () => {
   db.query('SELECT * FROM employee', function (err, results) {
     if (err) return console.error(err);
     console.table(results);
-    return init();
+    init();
   });
 };
 
@@ -47,6 +47,7 @@ const addDepartment = () => {
       {
         name: answer.deptName
       });
+      init();
   });
 };
 
@@ -73,7 +74,7 @@ const addRole = () => {
       salary: answer.roleSalary,
       department_id: answer.roleDepId,
     })
-    return init();
+    init();
   });
 };
 
@@ -106,7 +107,7 @@ const addEmployee = () => {
       role_id: answer.empRoleId,
       manager_id: answer.empManagerId,
     })
-    return init();
+    init();
   });
 };
 
@@ -142,7 +143,7 @@ const updateRole = () => {
           id: answers.emp,
           role_id: answers.newRole
         })
-        return init();
+        init();
     })
   });
 };
@@ -163,7 +164,7 @@ const init = () => {
         'Update an employee role',
         'Finish',
       ]
-    }
+    },
   ]).then((answers) => {
     switch (answers.questions) {
       case 'View all departments': {
