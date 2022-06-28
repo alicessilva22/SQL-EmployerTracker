@@ -34,6 +34,7 @@ const viewEmployees = () => {
     return init();
   });
 };
+debugger;
 
 const addDepartment = () => {
   inquirer.prompt([
@@ -161,7 +162,6 @@ const init = () => {
         'Add a role',
         'Add an employee',
         'Update an employee role',
-        'Finish',
       ]
     }
   ]).then((answers) => {
