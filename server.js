@@ -34,7 +34,6 @@ const viewEmployees = () => {
     return init();
   });
 };
-debugger;
 
 const addDepartment = () => {
   inquirer.prompt([
@@ -48,7 +47,6 @@ const addDepartment = () => {
       {
         name: answer.deptName
       });
-      return init();
   });
 };
 
@@ -102,7 +100,7 @@ const addEmployee = () => {
       message: 'What is the employee\'s manager id?'
     },
   ]).then(answer => {
-    db.query('INSERT INTO employee SET ?', {
+    db.query('INSERT INTO employee SET ?;', {
       first_name: answer.firstName,
       last_name: answer.lastName,
       role_id: answer.empRoleId,
@@ -113,7 +111,7 @@ const addEmployee = () => {
 };
 
 const updateRole = () => {
-  db.query('SELECT * FROM employee', (err, res) => {
+  db.query('SELECT * FROM employee;', (err, res) => {
     // console.log(res)
 
     // let employeeNames = []
@@ -144,8 +142,9 @@ const updateRole = () => {
           id: answers.emp,
           role_id: answers.newRole
         })
+        return init();
     })
-  })
+  });
 };
 
 const init = () => {
@@ -162,6 +161,7 @@ const init = () => {
         'Add a role',
         'Add an employee',
         'Update an employee role',
+        'Finish',
       ]
     }
   ]).then((answers) => {
